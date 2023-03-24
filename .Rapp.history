@@ -1,0 +1,600 @@
+AIC(linear_model_complex)#
+AIC(linear_model_simple)#
+AIC(mixed_model_complex)#
+AIC(mixed_model_simple)#
+AIC(mixed_model_noenvironment)
+summary(mixed_model_complex)
+library(MuMIn)#
+r.squaredGLMM(mixed_model_complex)
+linear_model_complex <- lm(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+vif(linear_model_complex)#
+linear_model_complex <- lm(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+sort(linear_model_complex$coefficients)#
+# Top 5 predictors by GLM normalized coefficient#
+linear_model_simple <- lm(RPD ~ BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+mixed_model_complex <- lmer(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+vif(mixed_model_complex)#
+# Reassign model to object after removing VIF > 4#
+mixed_model_complex <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_7 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+sort(fixef(mixed_model_complex))#
+# Top 5 predictors by LMM normalized coefficient#
+mixed_model_simple <- lmer(RPD ~ BIOCLIM_7 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+mixed_model_noenvironment <- lmer(RPD ~ (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+summary(mixed_model_complex)
+logit_complex <- glm(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)#
+vif(logit_complex)#
+logit_complex <- glm(CANAPE_significant ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)#
+sort(logit_complex$coefficients)#
+logit_simple <- glm(CANAPE_significant ~ BIOCLIM_1 + BIOCLIM_3 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable, family = binomial(link='logit'), data = combined.scaled)#
+# Be warned, these logit models will take about 1 minute and 0.5 GB RAM.#
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation#
+vif(mixed_model_complex)#
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation#
+sort(fixef(mixed_model_complex))#
+mixed_model_simple <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + soiltype_mostprobable + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation#
+mixed_model_noenvironment <- glmer(CANAPE_significant ~ (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa", optCtrl=list(maxfun = 2e5)))
+library(ggplot2)
+levels(combined.scaled$RPD_significance)[levels(combined.scaled$RPD_significance)=="NS"] <- NA # NS excluded by the metrics
+levels(combined$RPD_significance)[levels(combined$RPD_significance)=="NS"] <- NA # NS excluded by the metrics
+ggplot(combined[!is.na(combined$RPD_significance), ], aes(x = RPD_significance, y = aridity_index_UNEP, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Aridity vs. RPD significance", x="RPD significance", y = "UNEP aridity index") + ylim(quantile(combined$aridity_index_UNEP, 0.025, na.rm = TRUE), quantile(combined$aridity_index_UNEP, 0.975, na.rm = TRUE))
+mixed_model_complex <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_7 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+sort(fixef(mixed_model_complex))
+ggplot(combined[!is.na(combined$RPD_significance), ], aes(x = RPD_significance, y = BIOCLIM_7, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. RPD significance", x="RPD significance", y = "BIO7 (temperature annual range)") + ylim(quantile(combined$aridity_index_UNEP, 0.025, na.rm = TRUE), quantile(combined$aridity_index_UNEP, 0.975, na.rm = TRUE))
+ggplot(combined[!is.na(combined$RPD_significance), ], aes(x = RPD_significance, y = BIOCLIM_7, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. RPD significance", x="RPD significance", y = "BIO7 (temperature annual range)"))
+ggplot(combined[!is.na(combined$RPD_significance), ], aes(x = RPD_significance, y = BIOCLIM_7, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. RPD significance", x="RPD significance", y = "BIO7 (temperature annual range)")
+ggplot(combined[!is.na(combined$RPD_significance), ], aes(x = RPD_significance, y = BIOCLIM_7/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. RPD significance", x="RPD significance", y = "BIO7 (temperature annual range)")
+ggplot(combined[!is.na(combined$RPD_significance), ], aes(x = RPD_significance, y = BIOCLIM_17, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. RPD significance", x="RPD significance", y = "Precipitation of driest quarter (mm)")
+ggplot(combined[!is.na(combined$RPD_significance), ], aes(x = RPD_significance, y = BIOCLIM_3/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. RPD significance", x="RPD significance", y = "BIO3 (isothermality in °C)")
+ggplot(combined[!is.na(combined$RPD_significance), ], aes(x = RPD_significance, y = BIOCLIM_3/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. RPD significance", x="RPD significance", y = "BIO3")
+ggplot(combined[!is.na(combined$RPD_significance), ], aes(x = RPD_significance, y = BIOCLIM_1/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Mean annual temperature vs. RPD significance", x="RPD significance", y = "BIO1 (mean annual temperature in in °C")
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation#
+sort(fixef(mixed_model_complex))
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_3/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. RPD significance", x="RPD significance", y = "BIO3")
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_7/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. RPD significance", x="RPD significance", y = "BIO7 (temperature annual range in °C)")
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_17, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Precipitation in dry season vs. RPD significance", x="RPD significance", y = "Precipitation of driest quarter (mm)")
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_1/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Mean annual temperature vs. RPD significance", x="RPD significance", y = "BIO1 (mean annual temperature in in °C")
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_3/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. CANAPE significance", x="CANAPE significance", y = "BIO3")
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_3/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. CANAPE significance", x="CANAPE significance", y = "BIO3")
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_4/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. CANAPE significance", x="CANAPE significance", y = "BIO4 (temperature seasonality)")
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_4/10, fill = CANAPE)) + geom_violin(trim=TRUE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. CANAPE significance", x="CANAPE significance", y = "BIO4 (temperature seasonality)")
+ggplot(combined, aes(x = CANAPE, y = GTOPO30_ELEVATION, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Elevation vs. CANAPE significance", x="CANAPE significance", y = "Elevation (m)") + ylim(quantile(combined$ISRICSOILGRIDS_new_average_nitrogen_reduced, 0.025, na.rm = TRUE), quantile(combined$ISRICSOILGRIDS_new_average_nitrogen_reduced, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_12, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Annual precipitation vs. CANAPE significance", x="CANAPE significance", y = "Annual precipitation (mm)") + ylim(quantile(combined$ISRICSOILGRIDS_new_average_phx10percent_reduced/10, 0.025, na.rm = TRUE), quantile(combined$ISRICSOILGRIDS_new_average_phx10percent_reduced/10, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = GTOPO30_ELEVATION, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Elevation vs. CANAPE significance", x="CANAPE significance", y = "Elevation (m)")
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_12, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Annual precipitation vs. CANAPE significance", x="CANAPE significance", y = "Annual precipitation (mm)")
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_12, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Annual precipitation vs. CANAPE significance", x="CANAPE significance", y = "Annual precipitation (mm)") + ylim(quantile(combined$BIOCLIM_12, 0.025, na.rm = TRUE), quantile(combined$BIOCLIM_12, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = GTOPO30_ELEVATION, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Elevation vs. CANAPE significance", x="CANAPE significance", y = "Elevation (m)") + ylim(quantile(combined$GTOPO30_ELEVATION, 0.025, na.rm = TRUE), quantile(combined$GTOPO30_ELEVATION, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_4/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. CANAPE significance", x="CANAPE significance", y = "BIO4 (temperature seasonality)") + ylim(quantile(combined$BIOCLIM_4/10, 0.025, na.rm = TRUE), quantile(combined$BIOCLIM_4/10, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_3/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. CANAPE significance", x="CANAPE significance", y = "BIO3") + ylim(quantile(combined$BIOCLIM_3/10, 0.025, na.rm = TRUE), quantile(combined$BIOCLIM_3/10, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_3/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. CANAPE significance", x="CANAPE significance", y = "BIO3")
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_4/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. CANAPE significance", x="CANAPE significance", y = "BIO4 (temperature seasonality)") + ylim(quantile(combined$BIOCLIM_4/10, 0.025, na.rm = TRUE), quantile(combined$BIOCLIM_4/10, 0.975, na.rm = TRUE))
+mixed_model_complex <- lmer(SR ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+sort(fixef(mixed_model_complex))
+ggplot(combined, aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 35) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined, aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 20) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined[combined$SR > 1, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 20) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 20) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 30) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 25) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 20) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+plot(SR ~ BIOCLIM_3/10, data = combined[combined$SR > 2, ])
+plot(SR ~ BIOCLIM_3/10, data = combined[combined$SR > 2, ])
+plot(SR ~ BIOCLIM_3, data = combined[combined$SR > 2, ])
+ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 20) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 19) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+linear_model_complex <- lm(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+env <- list.files(path="./environmental_data", pattern = "richness", full.names = TRUE) %>% lapply(read_csv) %>% bind_rows #
+env <- data.frame(env)#
+env[env == -9999] <- NA#
+env$x <- round(env$x, digit = 1)#
+env$y <- round(env$y, digit = 1)#
+env$soiltype_mostprobable <- as.factor(env$soiltype_mostprobable)
+env %>% group_by(x, y) %>% summarize_if(is.numeric, mean, na.rm = TRUE) -> env
+env <- as.data.frame(env)
+head(env)
+soiltype_mostprobable <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)
+soiltype_mostprobable %>% group_by(x, y) %>% summarize_if(is.factor, mode, na.rm = TRUE) -> soiltype_mostprobable
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(n = n()) -> soiltype_mostprobable
+soiltype_mostprobable
+SR <- as.data.frame(SR)
+SR
+combined <- merge(combined, soiltype_mostprobable, by = c("x", "y"))
+combined.temp <- combined#
+combined.scaled <- rapply(combined.temp, scale, c("numeric","integer"), how="replace")#
+combined.scaled$SR <- combined$SR#
+combined.scaled <- as.data.frame(combined.scaled)#
+combined.scaled$y <- combined.temp$y#
+combined.scaled$x <- combined.temp$x
+linear_model_complex <- lm(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+summary(linear_model_complex)
+head(combined)
+head(combined)
+head(soiltype_mostprobable)
+soiltype_mostprobable <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")#
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)#
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)#
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(n = n()) %>% ungroup() %>% spread(Val, n, fill=0) -> soiltype_mostprobable
+soiltype_mostprobable %>% group_by(x, y)  tally %>%  spread(value, n, fill = 0) -> soiltype_mostprobable
+soiltype_mostprobable %>% group_by(x, y) %>% tally %>% spread(value, n, fill = 0) -> soiltype_mostprobable
+library(tidyverse)#
+soiltype_mostprobable %>% group_by(x, y) %>% tally %>% spread(value, n, fill = 0) -> soiltype_mostprobable
+soiltype_mostprobable %>% group_by(x, y) %>% tally %>% spread(soiltype_mostprobable, n, fill = 0) -> soiltype_mostprobable
+soiltype_mostprobable %>% group_by(x, y) %>% summarize_if(is.factor, mode, na.rm = TRUE) -> soiltype_mostprobable
+soiltype_mostprobable %>% group_by(x, y) %>% summarize_if(is.factor, mode) -> soiltype_mostprobable
+soiltype_mostprobable <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")#
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)#
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)#
+soiltype_mostprobable %>% group_by(x, y) %>% summarize_if(is.factor, mode) -> soiltype_mostprobable
+soiltype_mostprobable <- as.data.frame(soiltype_mostprobable)
+head(soiltype_mostprobable)
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")#
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)#
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)
+soiltype_mostprobable <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")#
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)#
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)
+soiltype_mostprobable %>% group_by(x, y) %>% summarize_if(is.factor, mode) -> soiltype_mostprobable#
+soiltype_mostprobable <- as.data.frame(soiltype_mostprobable)
+head(soiltype_mostprobable)
+soiltype_mostprobable <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")#
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)#
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)#
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(mode = fmode(soiltype_mostprobable)) -> soiltype_mostprobable
+library(collapse)
+install.packages(collapse)
+install.packages("collapse")
+library(collapse)
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(mode = fmode(soiltype_mostprobable)) -> soiltype_mostprobable
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(mode = fmode(soiltype_mostprobable)) -> soiltype_mostprobable#
+soiltype_mostprobable <- as.data.frame(soiltype_mostprobable)
+soiltype_mostprobable <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")#
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)#
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)#
+library(collapse)#
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(mode = fmode(soiltype_mostprobable)) -> soiltype_mostprobable#
+soiltype_mostprobable <- as.data.frame(soiltype_mostprobable)
+head(soiltype_mostprobable)
+soiltype_mostprobable <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")#
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)#
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)#
+library(collapse)#
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(mode = mode(soiltype_mostprobable)) -> soiltype_mostprobable#
+soiltype_mostprobable <- as.data.frame(soiltype_mostprobable)
+head(soiltype_mostprobable)
+soiltype_mostprobable <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")#
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)#
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)#
+library(collapse)#
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(mode = fmode(soiltype_mostprobable, na.rm = TRUE)) -> soiltype_mostprobable#
+soiltype_mostprobable <- as.data.frame(soiltype_mostprobable)
+head(soiltype_mostprobable)
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(mode = fmode(soiltype_mostprobable, na.rm = TRUE, ties = 1)) -> soiltype_mostprobable
+soiltype_mostprobable <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")#
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)#
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)#
+library(collapse)#
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(mode = fmode(soiltype_mostprobable, na.rm = TRUE, ties = 1)) -> soiltype_mostprobable#
+soiltype_mostprobable <- as.data.frame(soiltype_mostprobable)
+head(soiltype_mostprobable)
+soiltype_mostprobable <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soiltype_mostprobable) <- c("x", "y", "soiltype_mostprobable")#
+soiltype_mostprobable$x <- round(soiltype_mostprobable$x, digit = 1)#
+soiltype_mostprobable$y <- round(soiltype_mostprobable$y, digit = 1)#
+soiltype_mostprobable$soiltype_mostprobable <- as.factor(soiltype_mostprobable$soiltype_mostprobable)#
+soiltype_mostprobable %>% group_by(x, y) %>%  summarise(soiltype_mostprobable = soiltype_mostprobable[which.max(table(soiltype_mostprobable))]) -> soiltype_mostprobable#
+soiltype_mostprobable <- as.data.frame(soiltype_mostprobable)
+head(soiltype_mostprobable)
+table(soiltype_mostprobable)
+soil <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soil) <- c("x", "y", "soiltype_mostprobable")#
+soil$x <- round(soil$x, digit = 1)#
+soil$y <- round(soil$y, digit = 1)#
+soil$soil <- as.factor(soil$soiltype_mostprobable)#
+soil %>% group_by(x, y) %>%  summarise(soiltype_mostprobable = soiltype_mostprobable[which.max(table(soiltype_mostprobable))]) -> soil#
+soil <- as.data.frame(soil)
+head(soil)
+soil <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soil) <- c("x", "y", "soiltype_mostprobable")#
+soil$x <- round(soil$x, digit = 1)#
+soil$y <- round(soil$y, digit = 1)#
+soil$soil <- as.factor(soil$soiltype_mostprobable)
+head(soil)
+soil <- read.csv("./environmental_data/soiltype_mostprobable_richness.csv")#
+names(soil) <- c("x", "y", "soiltype_mostprobable")#
+soil$x <- round(soil$x, digit = 1)#
+soil$y <- round(soil$y, digit = 1)
+head(soil)
+#########################
+# Load data sets#
+#########################
+#
+library(dplyr)#
+library(readr)#
+# Load environmental data; starting with species richness to ensure as many pixels are recovered as possible#
+env <- list.files(path="./environmental_data", pattern = "richness", full.names = TRUE) %>% lapply(read_csv) %>% bind_rows #
+env <- data.frame(env)#
+env[env == -9999] <- NA#
+env$x <- round(env$x, digit = 1)#
+env$y <- round(env$y, digit = 1)#
+env %>% group_by(x, y) %>% summarize_if(is.numeric, mean, na.rm = TRUE) -> env # soil type excluded at this step (not summarized correctly in source file)#
+env <- as.data.frame(env)#
+#
+# Add RPD randomizations#
+rand_RPD <- read.csv("./Astragalus_50km_csvsToShare/rand_RPD.csv")#
+rand_RPD$x <- round(rand_RPD$x, digit = 1)#
+rand_RPD$y <- round(rand_RPD$y, digit = 1)#
+rand_RPD %>% group_by(x, y) %>% summarize_if(is.numeric, mean, na.rm = TRUE) -> rand_RPD#
+rand_RPD <- as.data.frame(rand_RPD)#
+# Add significance column#
+rand_RPD$RPD_significance <- as.factor(ifelse(rand_RPD$value < 0.05, "Low", ifelse(rand_RPD$value > 0.95, "High", "NS")))#
+rand_RPD$value <- NULL#
+#
+combined <- merge(rand_RPD, env, by = c("x", "y"))#
+#
+# Add RPD#
+RPD <- read.csv("./Astragalus_50km_csvsToShare/RPD.csv")#
+names(RPD) <- c("x", "y", "RPD")#
+RPD$x <- round(RPD$x, digit = 1)#
+RPD$y <- round(RPD$y, digit = 1)#
+RPD %>% group_by(x, y) %>% summarize_if(is.numeric, mean, na.rm = TRUE) -> RPD#
+RPD <- as.data.frame(RPD)#
+#
+combined <- merge(combined, RPD, by = c("x", "y"))#
+#
+# Add CANAPE#
+CANAPE <- read.csv("./Astragalus_50km_csvsToShare/CANAPE.csv")#
+names(CANAPE) <- c("x", "y", "CANAPE")#
+CANAPE$x <- round(CANAPE$x, digit = 1)#
+CANAPE$y <- round(CANAPE$y, digit = 1)#
+CANAPE %>% group_by(x, y) %>% summarize_if(is.character, max) -> CANAPE#
+CANAPE <- as.data.frame(CANAPE)#
+CANAPE$CANAPE <- as.factor(CANAPE$CANAPE)#
+#
+combined <- merge(combined, CANAPE, by = c("x", "y"))#
+#
+## Add SR#
+SR <- read.csv("./Astragalus_50km_csvsToShare/richness.csv")#
+names(SR) <- c("x", "y", "SR")#
+SR$x <- round(SR$x, digit = 1)#
+SR$y <- round(SR$y, digit = 1)#
+SR %>% group_by(x, y) %>% summarize_if(is.numeric, mean, na.rm = TRUE) -> SR#
+SR <- as.data.frame(SR)#
+#
+combined <- merge(combined, SR, by = c("x", "y"))#
+#
+# Normalize entire data frame#
+combined.temp <- combined#
+combined.scaled <- rapply(combined.temp, scale, c("numeric","integer"), how="replace")#
+combined.scaled$SR <- combined$SR#
+combined.scaled <- as.data.frame(combined.scaled)#
+combined.scaled$y <- combined.temp$y#
+combined.scaled$x <- combined.temp$x
+linear_model_complex <- lm(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + soiltype_mostprobable + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+linear_model_complex <- lm(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+linear_model_complex <- lm(SR ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+linear_model_complex <- lm(SR ~ BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+linear_model_complex <- lm(SR ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+linear_model_complex <- lm(SR ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+linear_model_complex <- lm(SR ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+sort(linear_model_complex$coefficients)
+sort(abs(linear_model_complex$coefficients))
+sort(abs(linear_model_complex$coefficients))
+mixed_model_complex <- lmer(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+vif(mixed_model_complex)
+mixed_model_complex <- lmer(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+vif(mixed_model_complex)
+mixed_model_complex <- lmer(SR ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+vif(mixed_model_complex)
+mixed_model_complex <- lmer(SR ~ BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+vif(mixed_model_complex)
+sort(abs(fixef(mixed_model_complex)))
+mixed_model_simple <- lmer(SR ~ BIOCLIM_3 + BIOCLIM_12 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+linear_model_complex <- lm(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+vif(linear_model_complex)#
+linear_model_complex <- lm(SR ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+sort(abs(linear_model_complex$coefficients))#
+# Top 5 predictors by GLM normalized coefficient#
+linear_model_simple <- lm(SR ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced, data = combined.scaled)#
+library(lme4)#
+mixed_model_complex <- lmer(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+library(car)#
+vif(mixed_model_complex)#
+# Reassign model to object after removing VIF > 4#
+mixed_model_complex <- lmer(SR ~ BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+sort(abs(fixef(mixed_model_complex)))#
+# Top 5 predictors by LMM normalized coefficient#
+mixed_model_simple <- lmer(SR ~ BIOCLIM_3 + BIOCLIM_12 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+mixed_model_noenvironment <- lmer(SR ~ (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+AIC(linear_model_complex)#
+AIC(linear_model_simple)#
+AIC(mixed_model_complex)#
+AIC(mixed_model_simple)#
+AIC(mixed_model_noenvironment)
+summary(mixed_model_complex)
+r.squaredGLMM(mixed_model_complex)
+linear_model_complex <- lm(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+linear_model_complex <- lm(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+linear_model_complex <- lm(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+linear_model_complex <- lm(RPD ~ BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+linear_model_complex <- lm(RPD ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+vif(linear_model_complex)
+sort(abs(linear_model_complex$coefficients))
+linear_model_simple <- lm(RPD ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced, data = combined.scaled)
+mixed_model_complex <- lmer(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+vif(mixed_model_complex)
+mixed_model_complex <- lmer(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+vif(mixed_model_complex)
+mixed_model_complex <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+vif(mixed_model_complex)
+mixed_model_complex <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+vif(mixed_model_complex)
+mixed_model_complex <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+vif(mixed_model_complex)
+sort(abs(fixef(mixed_model_complex)))
+mixed_model_simple <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+linear_model_complex <- lm(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+vif(linear_model_complex)#
+linear_model_complex <- lm(RPD ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+sort(abs(linear_model_complex$coefficients))#
+# Top 5 predictors by GLM normalized coefficient#
+linear_model_simple <- lm(RPD ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced, data = combined.scaled)#
+mixed_model_complex <- lmer(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+vif(mixed_model_complex)#
+# Reassign model to object after removing VIF > 4#
+mixed_model_complex <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+sort(abs(fixef(mixed_model_complex)))#
+# Top 5 predictors by LMM normalized coefficient#
+mixed_model_simple <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+mixed_model_noenvironment <- lmer(RPD ~ (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)
+AIC(linear_model_complex)#
+AIC(linear_model_simple)#
+AIC(mixed_model_complex)#
+AIC(mixed_model_simple)#
+AIC(mixed_model_noenvironment)
+r.squaredGLMM(mixed_model_complex)
+combined.scaled$CANAPE_significant <- combined.scaled$CANAPE#
+levels(combined.scaled$CANAPE_significant)[levels(combined.scaled$CANAPE_significant)=="Neo"] <-"Sig"#
+levels(combined.scaled$CANAPE_significant)[levels(combined.scaled$CANAPE_significant)=="Mixed"] <-"Sig"#
+levels(combined.scaled$CANAPE_significant)[levels(combined.scaled$CANAPE_significant)=="Paleo"] <-"Sig"#
+levels(combined.scaled$CANAPE_significant)
+logit_complex <- glm(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)
+vif(logit_complex)
+logit_complex <- glm(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)
+vif(logit_complex)
+logit_complex <- glm(CANAPE_significant ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)
+vif(logit_complex)
+logit_complex <- glm(CANAPE_significant ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)
+vif(logit_complex)
+logit_complex <- glm(CANAPE_significant ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)
+vif(logit_complex)
+sort(abs(logit_complex$coefficients))
+logit_simple <- glm(CANAPE_significant ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced, family = binomial(link='logit'), data = combined.scaled)
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation
+vif(mixed_model_complex)
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation
+vif(mixed_model_complex)
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation
+vif(mixed_model_complex)
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation
+vif(mixed_model_complex)
+sort(abs(fixef(mixed_model_complex)))
+mixed_model_simple <- glmer(CANAPE_significant ~ BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation
+mixed_model_noenvironment <- glmer(CANAPE_significant ~ (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa", optCtrl=list(maxfun = 2e5)))
+combined.scaled$CANAPE_significant <- combined.scaled$CANAPE#
+levels(combined.scaled$CANAPE_significant)[levels(combined.scaled$CANAPE_significant)=="Neo"] <-"Sig"#
+levels(combined.scaled$CANAPE_significant)[levels(combined.scaled$CANAPE_significant)=="Mixed"] <-"Sig"#
+levels(combined.scaled$CANAPE_significant)[levels(combined.scaled$CANAPE_significant)=="Paleo"] <-"Sig"#
+levels(combined.scaled$CANAPE_significant)#
+# Reduce factor to 2 levels; otherwise glm guesses and does this silently#
+# Top 5 variables in simple models chosen based on coefficients in complex logit model#
+logit_complex <- glm(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)#
+vif(logit_complex)#
+logit_complex <- glm(CANAPE_significant ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)#
+sort(abs(logit_complex$coefficients))#
+logit_simple <- glm(CANAPE_significant ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced, family = binomial(link='logit'), data = combined.scaled)#
+# Be warned, these logit models will take about 1 minute and 0.5 GB RAM.#
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation#
+vif(mixed_model_complex)#
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation#
+sort(abs(fixef(mixed_model_complex)))#
+mixed_model_simple <- glmer(CANAPE_significant ~ BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation#
+mixed_model_noenvironment <- glmer(CANAPE_significant ~ (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa", optCtrl=list(maxfun = 2e5)))#
+#
+AIC(logit_complex)#
+AIC(logit_simple)#
+AIC(mixed_model_complex)#
+AIC(mixed_model_simple)#
+AIC(mixed_model_noenvironment)
+summary(mixed_model_simple)
+r.squaredGLMM(mixed_model_simple)
+sort(abs(fixef(mixed_model_simple)))
+sort(abs(fixef(mixed_model_complex)))
+mixed_model_simple <- glmer(CANAPE_significant ~ BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation
+AIC(logit_complex)#
+AIC(logit_simple)#
+AIC(mixed_model_complex)#
+AIC(mixed_model_simple)#
+AIC(mixed_model_noenvironment)
+summary(mixed_model_simple)
+r.squaredGLMM(mixed_model_simple)
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_17, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature seasonality vs. CANAPE significance", x="CANAPE significance", y = "BIO4 (temperature seasonality)") + ylim(quantile(combined$BIOCLIM_17, 0.025, na.rm = TRUE), quantile(combined$BIOCLIM_17, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_17, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Precipitation of dry season vs. CANAPE significance", x="CANAPE significance", y = "Precipitation of driest quarter (mm)") + ylim(quantile(combined$BIOCLIM_17, 0.025, na.rm = TRUE), quantile(combined$BIOCLIM_17, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_17, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Precipitation of dry season \nvs. CANAPE significance", x="CANAPE significance", y = "Precipitation of driest quarter (mm)") + ylim(quantile(combined$BIOCLIM_17, 0.025, na.rm = TRUE), quantile(combined$BIOCLIM_17, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_3/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. CANAPE significance", x="CANAPE significance", y = "BIO3")
+ggplot(combined, aes(x = CANAPE, y = ISRICSOILGRIDS_new_average_phx10percent_reduced, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Elevation vs. CANAPE significance", x="CANAPE significance", y = "Elevation (m)") + ylim(quantile(combined$ISRICSOILGRIDS_new_average_phx10percent_reduced, 0.025, na.rm = TRUE), quantile(combined$ISRICSOILGRIDS_new_average_phx10percent_reduced, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Elevation vs. CANAPE significance", x="CANAPE significance", y = "Elevation (m)") + ylim(quantile(combined$ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced, 0.025, na.rm = TRUE), quantile(combined$ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = ISRICSOILGRIDS_new_average_nitrogen_reduced, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Elevation vs. CANAPE significance", x="CANAPE significance", y = "Elevation (m)") + ylim(quantile(combined$ISRICSOILGRIDS_new_average_nitrogen_reduced, 0.025, na.rm = TRUE), quantile(combined$ISRICSOILGRIDS_new_average_nitrogen_reduced, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = ISRICSOILGRIDS_new_average_nitrogen_reduced, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Nitrogen content vs. CANAPE significance", x="CANAPE significance", y = "Nitrogen content (cg/kg)") + ylim(quantile(combined$ISRICSOILGRIDS_new_average_nitrogen_reduced, 0.025, na.rm = TRUE), quantile(combined$ISRICSOILGRIDS_new_average_nitrogen_reduced, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = y, y = SR)) + geom_hex(bins = 30) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude", y="Species richness", x = "Latitude")
+ggplot(combined, aes(x = y, y = SR)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude", y="Species richness", x = "Latitude")
+ggplot(combined, aes(x = Sr, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude", y="Species richness", x = "Latitude")
+ggplot(combined, aes(x = y, y = SR)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude", y="Species richness", x = "Latitude")
+ggplot(combined, aes(x = y, y = RPD)) + geom_hex(bins = 30) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude", y="RPD", x = "Latitude")
+linear_model_complex <- lm(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+vif(linear_model_complex)#
+linear_model_complex <- lm(SR ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+sort(abs(linear_model_complex$coefficients))#
+# Top 5 predictors by GLM normalized coefficient#
+linear_model_simple <- lm(SR ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced, data = combined.scaled)#
+library(lme4)#
+mixed_model_complex <- lmer(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+library(car)#
+vif(mixed_model_complex)#
+# Reassign model to object after removing VIF > 4#
+mixed_model_complex <- lmer(SR ~ BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+sort(abs(fixef(mixed_model_complex)))#
+# Top 5 predictors by LMM normalized coefficient#
+mixed_model_simple <- lmer(SR ~ BIOCLIM_3 + BIOCLIM_12 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+mixed_model_noenvironment <- lmer(SR ~ (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+#
+AIC(linear_model_complex)#
+AIC(linear_model_simple)#
+AIC(mixed_model_complex)#
+AIC(mixed_model_simple)#
+AIC(mixed_model_noenvironment)
+12700.66-13106.43
+linear_model_complex <- lm(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)
+linear_model_complex$coefficients
+length(linear_model_complex$coefficients)
+linear_model_complex <- lm(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+vif(linear_model_complex)#
+linear_model_complex <- lm(RPD ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+sort(abs(linear_model_complex$coefficients))#
+# Top 5 predictors by GLM normalized coefficient#
+linear_model_simple <- lm(RPD ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced, data = combined.scaled)#
+mixed_model_complex <- lmer(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+vif(mixed_model_complex)#
+# Reassign model to object after removing VIF > 4#
+mixed_model_complex <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+sort(abs(fixef(mixed_model_complex)))#
+# Top 5 predictors by LMM normalized coefficient#
+mixed_model_simple <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+mixed_model_noenvironment <- lmer(RPD ~ (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+#
+AIC(linear_model_complex)#
+AIC(linear_model_simple)#
+AIC(mixed_model_complex)#
+AIC(mixed_model_simple)#
+AIC(mixed_model_noenvironment)
+5846.19-5672.439
+logit_complex <- glm(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)#
+vif(logit_complex)#
+logit_complex <- glm(CANAPE_significant ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, family = binomial(link='logit'), data = combined.scaled)#
+sort(abs(logit_complex$coefficients))#
+logit_simple <- glm(CANAPE_significant ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_12 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced, family = binomial(link='logit'), data = combined.scaled)#
+# Be warned, these logit models will take about 1 minute and 0.5 GB RAM.#
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation#
+vif(mixed_model_complex)#
+mixed_model_complex <- glmer(CANAPE_significant ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation#
+sort(abs(fixef(mixed_model_complex)))#
+mixed_model_simple <- glmer(CANAPE_significant ~ BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa",optCtrl = list(maxfun = 2e5))) # Stronger likelihood search options per warnings + documentation#
+mixed_model_noenvironment <- glmer(CANAPE_significant ~ (1 | y) + (1 | x), family=binomial(link='logit'), na.action = na.omit, data = combined.scaled, control = glmerControl(optimizer = "bobyqa", optCtrl=list(maxfun = 2e5)))#
+#
+AIC(logit_complex)#
+AIC(logit_simple)#
+AIC(mixed_model_complex)#
+AIC(mixed_model_simple)#
+AIC(mixed_model_noenvironment)
+1436.847-1427.321
+summary(mixed_model_simple)
+linear_model_complex <- lm(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+vif(linear_model_complex)#
+linear_model_complex <- lm(RPD ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+sort(abs(linear_model_complex$coefficients))#
+# Top 5 predictors by GLM normalized coefficient#
+linear_model_simple <- lm(RPD ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced, data = combined.scaled)#
+mixed_model_complex <- lmer(RPD ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+vif(mixed_model_complex)#
+# Reassign model to object after removing VIF > 4#
+mixed_model_complex <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+sort(abs(fixef(mixed_model_complex)))#
+# Top 5 predictors by LMM normalized coefficient#
+mixed_model_simple <- lmer(RPD ~ BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_17 + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+mixed_model_noenvironment <- lmer(RPD ~ (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+#
+AIC(linear_model_complex)#
+AIC(linear_model_simple)#
+AIC(mixed_model_complex)#
+AIC(mixed_model_simple)#
+AIC(mixed_model_noenvironment)#
+# Complex mixed model favored#
+#
+summary(mixed_model_complex)
+linear_model_complex <- lm(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+vif(linear_model_complex)#
+linear_model_complex <- lm(SR ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled)#
+sort(abs(linear_model_complex$coefficients))#
+# Top 5 predictors by GLM normalized coefficient#
+linear_model_simple <- lm(SR ~ BIOCLIM_3 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced, data = combined.scaled)#
+library(lme4)#
+mixed_model_complex <- lmer(SR ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+library(car)#
+vif(mixed_model_complex)#
+# Reassign model to object after removing VIF > 4#
+mixed_model_complex <- lmer(SR ~ BIOCLIM_3 + BIOCLIM_12 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+sort(abs(fixef(mixed_model_complex)))#
+# Top 5 predictors by LMM normalized coefficient#
+mixed_model_simple <- lmer(SR ~ BIOCLIM_3 + BIOCLIM_12 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+mixed_model_noenvironment <- lmer(SR ~ (1 | y) + (1 | x), na.action = na.omit, data = combined.scaled)#
+#
+AIC(linear_model_complex)#
+AIC(linear_model_simple)#
+AIC(mixed_model_complex)#
+AIC(mixed_model_simple)#
+AIC(mixed_model_noenvironment)#
+# Complex mixed model favored#
+#
+summary(mixed_model_complex)
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_3/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. RPD significance", x="RPD significance", y = "BIO3 (isothermality)")
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_7/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature annual range vs. RPD significance", x="RPD significance", y = "BIO7 (temperature annual range in °C)")
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_17, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Precipitation in dry season vs. RPD significance", x="RPD significance", y = "Precipitation of driest quarter (mm)")
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_7/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Temperature annual range vs. RPD significance", x="RPD significance", y = "BIO7 (temperature annual range in °C)")
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_17, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Precipitation in dry season vs. RPD significance", x="RPD significance", y = "BIO17 (precipitation of driest quarter; mm)")
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_17, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Precipitation in dry season vs. RPD significance", x="RPD significance", y = "BIO17 (precipitation\n of driest quarter; mm)")
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_17, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Precipitation in dry season \nvs. RPD significance", x="RPD significance", y = "BIO17 (precipitation\n of driest quarter; mm)")
+ggplot(combined, aes(x = RPD_significance, y = BIOCLIM_1/10, fill = RPD_significance)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Mean annual temperature vs. RPD significance", x="RPD significance", y = "BIO1 (mean annual temperature in in °C")
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_3/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. CANAPE significance", x="CANAPE significance", y = "BIO3")
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_3/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Isothermality vs. CANAPE significance", x="CANAPE significance", y = "BIO3 (isothermality)")
+ggplot(combined, aes(x = CANAPE, y = BIOCLIM_17, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Precipitation of dry season \nvs. CANAPE significance", x="CANAPE significance", y = "BIO17 (precipitation\n of driest quarter; mm)") + ylim(quantile(combined$BIOCLIM_17, 0.025, na.rm = TRUE), quantile(combined$BIOCLIM_17, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = ISRICSOILGRIDS_new_average_nitrogen_reduced, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="Nitrogen content vs. CANAPE significance", x="CANAPE significance", y = "Nitrogen content (cg/kg)") + ylim(quantile(combined$ISRICSOILGRIDS_new_average_nitrogen_reduced, 0.025, na.rm = TRUE), quantile(combined$ISRICSOILGRIDS_new_average_nitrogen_reduced, 0.975, na.rm = TRUE))
+ggplot(combined, aes(x = CANAPE, y = ISRICSOILGRIDS_new_average_phx10percent_reduced/10, fill = CANAPE)) + geom_violin(trim=FALSE) + geom_boxplot(width=0.1, fill="white") + labs(title="pH vs. CANAPE significance", x="CANAPE significance", y = "pH") + ylim(quantile(combined$ISRICSOILGRIDS_new_average_phx10percent_reduced/10, 0.025, na.rm = TRUE), quantile(combined$ISRICSOILGRIDS_new_average_phx10percent_reduced/10, 0.975, na.rm = TRUE))
+ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bins = 20) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Isothermality vs. species richness", x="BIO3 (isothermality)", y = "SR")
+ggplot(combined, aes(x = BIOCLIM_1/10, y = SR)) + geom_hex(bins = 35) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Mean annual temperature (°C) vs. species richness", x="Aridity index", y = "SR")
+ggplot(combined, aes(x = BIOCLIM_1/10, y = SR)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Mean annual temperature (°C) vs. species richness", x="Aridity index", y = "SR")
+ggplot(combined, aes(x = BIOCLIM_1/10, y = SR)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Mean annual temperature (°C) \nvs. species richness", x="Aridity index", y = "SR")
+ggplot(combined, aes(x = y, y = SR)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude", y="Species richness", x = "Latitude")
+ggplot(combined, aes(x = y, y = RPD)) + geom_hex(bins = 30) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude", y="RPD", x = "Latitude")
