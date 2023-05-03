@@ -201,8 +201,29 @@ ggplot(combined[combined$SR > 2, ], aes(x = BIOCLIM_3/10, y = SR)) + geom_hex(bi
 ggplot(combined, aes(x = BIOCLIM_1/10, y = SR)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Mean annual temperature (°C) \nvs. species richness", x="Aridity index", y = "SR")
 
 # Latitude
+# SR vs. latitude
 ggplot(combined, aes(x = y, y = SR)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude", y="Species richness", x = "Latitude")
+# SR vs. latitude, north hemisphere
+ggplot(combined[combined$y > 0, ], aes(x = SR, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude, \nNorthern Hemisphere", y="Latitude", x = "Species richness")
+# SR vs. latitude, south hemisphere
+ggplot(combined[combined$y < 0, ], aes(x = SR, y = y)) + geom_hex(bins = 8) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude, \nSouthern Hemisphere", y="Latitude", x = "Species richness")
+# SR vs. latitude, east hemisphere
+ggplot(combined[combined$x > -27, ], aes(x = SR, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude, \nEastern Hemisphere", y="Latitude", x = "Species richness")
+# SR vs. latitude, north america
+ggplot(combined[combined$x < -27 & combined$y > 0, ], aes(x = y, y = SR)) + geom_hex(bins = 15) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude, \nNorth America", y="Species richness", x = "Latitude")
+
+
+# SR vs. latitude
+# RPD vs. latitude
 ggplot(combined, aes(x = y, y = RPD)) + geom_hex(bins = 30) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude", y="RPD", x = "Latitude")
+# RPD vs. latitude, north hemisphere
+ggplot(combined[combined$y > 0, ], aes(x = RPD, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude, \nNorthern Hemisphere", y="RPD", x = "Species richness")
+# RPD vs. latitude, south hemisphere
+ggplot(combined[combined$y < 0, ], aes(x = RPD, y = y)) + geom_hex(bins = 8) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude, \nSouthern Hemisphere", y="RPD", x = "Species richness")
+# RPD vs. latitude, east hemisphere
+ggplot(combined[combined$x > -27, ], aes(x = RPD, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude, \nEastern Hemisphere", y="Latitude", x = "RPD") + xlim(c(0,1))
+# RPD vs. latitude, north america
+ggplot(combined[combined$x < -27 & combined$y > 0, ], aes(x = y, y = RPD)) + geom_hex(bins = 15) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude, \nNorth America", y="RPD", x = "Latitude")
 
 
 

@@ -17,7 +17,7 @@ world <- rnaturalearth::ne_countries(returnclass = "sf") %>%
 ```
 
 ### IN BASH
-# gdalwarp -s_srs "+proj=moll +lon_0=1 +datum=WGS84 +units=m +no_defs" -t_srs ESRI:54030 spatial__CHAO2_ESTIMATE.tif spatial__CHAO2_ESTIMATE.robinson.tif
+# gdalwarp -s_srs "+proj=moll +lon_0=1 +datum=WGS84 +units=m +no_defs" -t_srs ESRI:54030 astragalus_CHAO2_ESTIMATE.tif astragalus_CHAO2_ESTIMATE.robinson.tif
 # gdalwarp -s_srs "+proj=moll +lon_0=1 +datum=WGS84 +units=m +no_defs" -t_srs ESRI:54030 rand__PE_CWE.tif rand__PE_CWE.robinson.tif
 # gdalwarp -s_srs "+proj=moll +lon_0=1 +datum=WGS84 +units=m +no_defs" -t_srs ESRI:54030 rand__PHYLO_RPE_NULL2.tif rand__PHYLO_RPE_NULL2.robinson.tif
 # gdalwarp -s_srs "+proj=moll +lon_0=1 +datum=WGS84 +units=m +no_defs" -t_srs ESRI:54030 rand__PHYLO_RPE2.tif rand__PHYLO_RPE2.robinson.tif
