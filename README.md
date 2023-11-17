@@ -2,10 +2,10 @@
 ## Base-level directory
 `astragalus.R` is the main analysis script. The base-level directory also provides two map summaries at differing spatial grain: `Astragalus_biodiverse_update_15km.pdf` shows 15-km square grid cells, and `Astragalus_biodiverse_update_50km.pdf` shows the same at 50-km square grid cell size, with the latter used for downstream analysis.
 
-## Astragalus_50km_tifsToShare and astragalus_mikebelitz_15km_outputs
+## Astragalus_50km_tifsToShare and Astragalus_15km_tifsToShare
 These two directories give a series of diversity statics globally at the two spatial grains (respectively in each folder) in GeoTIFF format. For instance, `astragalus_PHYLO_RPD2.tif` represents RPD.
 
-## Astragalus_50km_csvsToShare and Astragalus_CSVs_ToShare_15km
+## Astragalus_50km_csvsToShare and Astragalus_15km_csvsToShare
 These two directories represent the same data as above, but in tabular CSV format: x, y, value.
 
 ## environmental_data
