@@ -56,6 +56,19 @@ SR <- as.data.frame(SR)
 
 combined <- merge(combined, SR, by = c("x", "y"))
 
+## Add regionalization
+
+region <- read.csv("./Astragalus_phylogenetic_clustering/clusterOutputNexus_COLOUR.csv")
+names(region) <- c("x", "y", "region")
+region$x <- round(region$x, digit = 1)
+region$y <- round(region$y, digit = 1)
+region %>% group_by(x, y) %>% summarize_if(is.numeric, mean, na.rm = TRUE) -> region
+region <- as.data.frame(region)
+region[region$region == 4294967296, ] <- NA # missing data value
+
+combined <- merge(combined, region, by = c("x", "y"))
+
+
 # Normalize entire data frame
 combined.temp <- combined
 combined.scaled <- rapply(combined.temp, scale, c("numeric","integer"), how="replace")
@@ -207,23 +220,57 @@ ggplot(combined, aes(x = y, y = SR)) + geom_hex(bins = 18) + scale_fill_continuo
 ggplot(combined[combined$y > 0, ], aes(x = SR, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude, \nNorthern Hemisphere", y="Latitude", x = "Species richness")
 # SR vs. latitude, south hemisphere
 ggplot(combined[combined$y < 0, ], aes(x = SR, y = y)) + geom_hex(bins = 8) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude, \nSouthern Hemisphere", y="Latitude", x = "Species richness")
-# SR vs. latitude, east hemisphere
-ggplot(combined[combined$x > -27, ], aes(x = SR, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude, \nEastern Hemisphere", y="Latitude", x = "Species richness")
-# SR vs. latitude, north america
-ggplot(combined[combined$x < -27 & combined$y > 0, ], aes(x = y, y = SR)) + geom_hex(bins = 15) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="Species richness vs. latitude, \nNorth America", y="Species richness", x = "Latitude")
+# SR vs. latitude, east hemisphere, logarithmic
+ggplot(combined[combined$x > -27, ], aes(x = SR, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ log(x)) + labs(title="Species richness vs. latitude, \nEastern Hemisphere", y="Latitude", x = "Species richness")
+# SR vs. latitude, north america, logarithmic
+ggplot(combined[combined$x < -27 & combined$y > 0, ], aes(x = y, y = SR)) + geom_hex(bins = 15) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ log(x)) + labs(title="Species richness vs. latitude, \nNorth America", y="Species richness", x = "Latitude")
 
 
-# SR vs. latitude
+# RPD vs. latitude
 # RPD vs. latitude
 ggplot(combined, aes(x = y, y = RPD)) + geom_hex(bins = 30) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude", y="RPD", x = "Latitude")
 # RPD vs. latitude, north hemisphere
 ggplot(combined[combined$y > 0, ], aes(x = RPD, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude, \nNorthern Hemisphere", y="RPD", x = "Species richness")
 # RPD vs. latitude, south hemisphere
 ggplot(combined[combined$y < 0, ], aes(x = RPD, y = y)) + geom_hex(bins = 8) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude, \nSouthern Hemisphere", y="RPD", x = "Species richness")
-# RPD vs. latitude, east hemisphere
-ggplot(combined[combined$x > -27, ], aes(x = RPD, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude, \nEastern Hemisphere", y="Latitude", x = "RPD") + xlim(c(0,1))
-# RPD vs. latitude, north america
-ggplot(combined[combined$x < -27 & combined$y > 0, ], aes(x = y, y = RPD)) + geom_hex(bins = 15) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ x) + labs(title="RPD vs. latitude, \nNorth America", y="RPD", x = "Latitude")
+# RPD vs. latitude, east hemisphere, logarithmic
+ggplot(combined[combined$x > -27, ], aes(x = RPD, y = y)) + geom_hex(bins = 18) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ log(x)) + labs(title="RPD vs. latitude, \nEastern Hemisphere", y="Latitude", x = "RPD") + xlim(c(0,1))
+# RPD vs. latitude, north america, logarithmic
+ggplot(combined[combined$x < -27 & combined$y > 0, ], aes(x = y, y = RPD)) + geom_hex(bins = 15) + scale_fill_continuous(type = "viridis") + theme_bw() + geom_smooth(method='lm', formula = y ~ log(x)) + labs(title="RPD vs. latitude, \nNorth America", y="RPD", x = "Latitude")
 
+
+
+
+combined.scaled.reduced <- combined.scaled
+combined.scaled.reduced[is.na(combined.scaled.reduced)] <- 0
+
+library(MASS)
+discriminant <- lda(region ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled.reduced, na.action="na.omit")
+
+
+# Classification success
+discriminant.jackknife <- lda(region ~ aridity_index_UNEP + BIOCLIM_1 + BIOCLIM_3 + BIOCLIM_4 + BIOCLIM_12 + BIOCLIM_7 + BIOCLIM_17 + GTOPO30_ELEVATION + ISRICSOILGRIDS_new_average_nitrogen_reduced + ISRICSOILGRIDS_new_average_phx10percent_reduced + ISRICSOILGRIDS_new_average_soilorganiccarboncontent_reduced + ISRICSOILGRIDS_new_average_sandpercent_reduced + ISRICSOILGRIDS_new_average_coarsefragmentpercent_reduced + LandCover_1_Needleleaf + LandCover_3_Deciduousbroadleaf, data = combined.scaled.reduced, CV = TRUE)
+ct <- table(combined.scaled$region, discriminant.jackknife$class)
+sum(diag(prop.table(ct)))
+
+
+
+# Predict species by the discriminant function
+discriminant.prediction <- predict(discriminant)
+
+# Create dataframe for plotting
+plotdata <- data.frame(type = combined$region, lda = discriminant.prediction$x)
+plotdata$type <- as.factor(plotdata$type)
+
+plotdata.americas <- plotdata[plotdata$type %in% c("3","4","5","7"),]
+
+library(ggplot2)
+ggplot(plotdata.americas) + geom_point(aes(lda.LD1, lda.LD2, colour = type), size = 1) + scale_color_brewer(palette="BrBG")
+
+plotdata.asia <- plotdata[plotdata$type %in% c("5","6","10","11","12"),]
+ggplot(plotdata.asia) + geom_point(aes(lda.LD1, lda.LD2, colour = type), size = 1) + scale_color_brewer(palette="BrBG")
+
+plotdata.europe <- plotdata[plotdata$type %in% c("1","2","8","9"),]
+ggplot(plotdata.europe) + geom_point(aes(lda.LD1, lda.LD2, colour = type), size = 1) + scale_color_brewer(palette="BrBG")
 
 
